@@ -19,18 +19,24 @@ int main(int argc, char* argv[]) {
 }
 ~~~
 
+**Nota**: En caso de no tener la librería SDL instalada, no podremos compilar. En linux, se puede obtener de la siguiente forma:
+```
+sudo apt-get install libsdl2-dev
+```
+
 Compilamos con gcc
 
 ~~~{.bash}
 gcc minimal.c -lSDL2 -o minimal
 ~~~
 
+
 ## Generación de logs
 
 Una vez compilada la aplicación, la ejecutamos con valgrind para chequear errores de memoria, y registramos la salida en un archivo.
 
 ~~~{.bash}
-valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --gen-suppressions=all --log-file=minimal.log
+valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --gen-suppressions=all --log-file=minimal.log ./minimal
 ~~~
 
 Esto genera la salida normal de valgrind, pero le agrega una descripción de los leaks que va encontrando.
@@ -46,5 +52,5 @@ python3 parser.py minimal.log minimal.supp
 Y ahora podemos usar este archivo minimal.supp para filtrar los leaks de las aplicaciones con bibliotecas de terceros
 
 ~~~{.bash}
-valgrind --leak-check=full --show-leak-kinds=all --suppressions=minimal.supp
+valgrind --leak-check=full --show-leak-kinds=all --suppressions=minimal.supp ./minimal
 ~~~
